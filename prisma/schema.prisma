@@ -1,4 +1,3 @@
-// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,6 +13,7 @@ enum Role {
   STUDENT
 }
 
+// ---------- AUTH MODELS ----------
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -49,17 +49,18 @@ model User {
   emailVerified DateTime?
   image         String?
   role          Role      @default(STUDENT)
-  instituteId: user.instituteId ?? null,   
-  facultyId: user.facultyId ?? null,
-  studentId: user.studentId ?? null,
+
+  instituteId   String?
+  studentId     String?
+
   phone         String?
   department    String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  accounts Account[]
-  sessions Session[]
-  institute Institute? @relation(fields: [instituteId], references: [id])
+  accounts      Account[]
+  sessions      Session[]
+  institute     Institute?     @relation(fields: [instituteId], references: [id])
   studentProfile StudentProfile?
 }
 
@@ -71,10 +72,11 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
+// ---------- CORE MODELS ----------
 model Institute {
   id        String   @id @default(cuid())
   name      String
-  code      String   @unique // e.g., qwken1t5
+  code      String   @unique
   adminId   String   @unique
   address   String?
   phone     String?
@@ -105,11 +107,11 @@ model InstituteConfig {
   institute        Institute @relation(fields: [instituteId], references: [id])
 }
 
-// Excel #1: students.xlsx (Master Student Profile)
+// Excel #1: students.xlsx
 model StudentProfile {
   id                    String   @id @default(cuid())
   instituteId           String
-  student_id            String   // SID23001 (MUST match across all files)
+  student_id            String   // e.g., SID23001
   course                String?
   department            String?
   admission_year        Int?
@@ -128,18 +130,19 @@ model StudentProfile {
   activities    Activity[]
   fees          Fee[]
   predictions   DropoutPrediction[]
+  interventions InterventionLog[]
 
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 
-  @@unique([instituteId, student_id]) // local uniqueness per institute
+  @@unique([instituteId, student_id])
 }
 
-// Excel #2: attendance.xlsx (Daily)
+// Excel #2: attendance.xlsx
 model Attendance {
   id            String   @id @default(cuid())
   instituteId   String
-  studentId     String   // FK to StudentProfile.id
+  studentId     String
   date          DateTime
   is_present    Boolean
   subject_code  String?
@@ -158,14 +161,15 @@ model Assessment {
   id              String   @id @default(cuid())
   instituteId     String
   studentId       String
-  assessment_name String   // IA1, IA2, MidSem, FinalSem
-  assessment_type String?  // Internal, External, Project
+  assessment_name String
+  assessment_type String?
   subject_code    String?
   subject_name    String?
   due_date        DateTime?
   submission_date DateTime?
   max_score       Float
   score_obtained  Float
+  date            DateTime @default(now())
   
   student         StudentProfile @relation(fields: [studentId], references: [id])
   institute       Institute      @relation(fields: [instituteId], references: [id])
@@ -179,10 +183,10 @@ model Activity {
   instituteId   String
   studentId     String
   date          DateTime
-  activity_type String   // e.g., "LMS Login", "Library Entry", "Counselling Session"
+  activity_type String
   activity_name String?
-  duration      Int?     // in minutes
-  points        Int?     // activity points
+  duration      Int?
+  points        Int?
   
   student       StudentProfile @relation(fields: [studentId], references: [id])
   institute     Institute      @relation(fields: [instituteId], references: [id])
@@ -195,14 +199,14 @@ model Fee {
   id             String   @id @default(cuid())
   instituteId    String
   studentId      String
-  fee_type       String   // Tuition, Hostel, Library, etc.
+  fee_type       String
   due_date       DateTime
   amount_due     Float
   amount_paid    Float    @default(0)
   payment_date   DateTime?
   payment_method String?
   reminders_sent Int      @default(0)
-  status         String   @default("PENDING") // PENDING, PARTIAL, PAID, OVERDUE
+  status         String   @default("PENDING")
   
   student        StudentProfile @relation(fields: [studentId], references: [id])
   institute      Institute      @relation(fields: [instituteId], references: [id])
@@ -210,23 +214,48 @@ model Fee {
   @@index([studentId, status])
 }
 
-// AI Predictions
+// ---------- AI MODELS ----------
 model DropoutPrediction {
-  id                String   @id @default(cuid())
-  studentId         String
-  prediction_date   DateTime @default(now())
-  risk_score        Float    // 0-1 probability
-  risk_level        String   // LOW, MEDIUM, HIGH, CRITICAL
-  confidence        Float    // model confidence
-  contributing_factors Json  // array of factors
-  recommendations   Json?    // suggested interventions
-  
-  student           StudentProfile @relation(fields: [studentId], references: [id])
-  
-  @@index([studentId, prediction_date])
+  id                   String   @id @default(cuid())
+  studentId            String
+  prediction_date      DateTime
+  risk_score           Float
+  risk_level           String
+  confidence           Float
+  contributing_factors Json
+  recommendations      Json?
+  model_version        String?
+
+  student              StudentProfile @relation(fields: [studentId], references: [id])
+
+  @@unique([studentId, prediction_date], name: "studentId_prediction_date")
 }
 
-// Notifications Log
+
+
+model InterventionLog {
+  id            String   @id @default(cuid())
+  studentId     String
+  action_type   String   // e.g., "Counselling", "Fee Reminder"
+  description   String?
+  assigned_to   String?  // mentor/teacher ID
+  status        String   @default("PENDING")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  student       StudentProfile @relation(fields: [studentId], references: [id])
+}
+
+model PredictionAudit {
+  id           String   @id @default(cuid())
+  model_version String
+  trained_at   DateTime @default(now())
+  features_used Json
+  accuracy     Float?
+  notes        String?
+}
+
+// ---------- Notifications ----------
 model Notification {
   id          String   @id @default(cuid())
   studentId   String
@@ -234,7 +263,7 @@ model Notification {
   content     String
   sent_at     DateTime @default(now())
   status      String   // SENT, FAILED, PENDING
-  recipient   String   // email or phone
-  
+  recipient   String
+
   @@index([studentId, sent_at])
 }

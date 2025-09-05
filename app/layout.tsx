@@ -11,6 +11,7 @@ export const metadata: Metadata = {
   description: 'AI-based dropout prediction and counseling system for educational institutions',
 }
 
+
 export default function RootLayout({
   children,
 }: {
@@ -18,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <Providers>
           {children}
           <Toaster />

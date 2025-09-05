@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import * as XLSX from 'xlsx'
 
 export async function POST(req: NextRequest) {
   try {
@@ -77,31 +78,30 @@ export async function POST(req: NextRequest) {
       }))
     )
 
-    // Convert to Excel buffers (simplified - in production use a proper Excel library)
-    const createCSVBuffer = (data: any[], filename: string) => {
-      const headers = Object.keys(data[0] || {})
-      const csvContent = [
-        headers.join(','),
-        ...data.map(row => headers.map(h => row[h] || '').join(','))
-      ].join('\n')
-      return new Blob([csvContent], { type: 'text/csv' })
+    // Convert to Excel buffers
+    const createExcelBuffer = (data: any[], sheetName: string) => {
+      const workbook = XLSX.utils.book_new()
+      const worksheet = XLSX.utils.json_to_sheet(data)
+      XLSX.utils.book_append_sheet(workbook, worksheet, sheetName)
+      return XLSX.write(workbook, { type: 'buffer', bookType: 'xlsx' })
     }
 
     // Create form data with files
-    formData.append('files', createCSVBuffer(studentsData, 'students.xlsx'), 'students.xlsx')
-    formData.append('files', createCSVBuffer(attendanceData, 'attendance.xlsx'), 'attendance.xlsx')
-    formData.append('files', createCSVBuffer(assessmentData, 'assessments.xlsx'), 'assessments.xlsx')
-    formData.append('files', createCSVBuffer(activitiesData, 'activities.xlsx'), 'activities.xlsx')
-    formData.append('files', createCSVBuffer(feesData, 'fees.xlsx'), 'fees.xlsx')
+    formData.append('files', new Blob([createExcelBuffer(studentsData, 'Students')]), 'students.xlsx')
+    formData.append('files', new Blob([createExcelBuffer(attendanceData, 'Attendance')]), 'attendance.xlsx')
+    formData.append('files', new Blob([createExcelBuffer(assessmentData, 'Assessments')]), 'assessments.xlsx')
+    formData.append('files', new Blob([createExcelBuffer(activitiesData, 'Activities')]), 'activities.xlsx')
+    formData.append('files', new Blob([createExcelBuffer(feesData, 'Fees')]), 'fees.xlsx')
 
     // Call FastAPI prediction service
-    const fastApiResponse = await fetch(`${process.env.FASTAPI_URL || 'http://127.0.0.1:8000'}/predict`, {
+    const fastApiResponse = await fetch(`${process.env.FASTAPI_URL || 'http://localhost:8000'}/predict`, {
       method: 'POST',
       body: formData
     })
 
     if (!fastApiResponse.ok) {
-      throw new Error(`FastAPI error: ${fastApiResponse.statusText}`)
+      const errorText = await fastApiResponse.text()
+      throw new Error(`FastAPI error: ${fastApiResponse.statusText} - ${errorText}`)
     }
 
     const predictions = await fastApiResponse.json()
@@ -116,16 +116,31 @@ export async function POST(req: NextRequest) {
       })
 
       if (student) {
-        await prisma.dropoutPrediction.create({
-          data: {
-            studentId: student.id,
-            risk_score: prediction.risk_score,
-            risk_level: prediction.risk_category,
-            confidence: prediction.risk_score,
-            contributing_factors: prediction.explanation ? { explanation: prediction.explanation } : {},
-            model_version: 'v1.0.0'
-          }
-        })
+        // Replace the upsert operation with this corrected version
+await prisma.dropoutPrediction.upsert({
+  where: {
+    studentId_prediction_date: { // This now matches your schema
+      studentId: student.id,
+      prediction_date: new Date() // Use current date or appropriate date
+    }
+  },
+  update: {
+    risk_score: prediction.risk_score,
+    risk_level: prediction.risk_category,
+    confidence: prediction.risk_score,
+    contributing_factors: prediction.explanation ? { explanation: prediction.explanation } : {},
+    model_version: 'v1.0.0'
+  },
+  create: {
+    studentId: student.id,
+    risk_score: prediction.risk_score,
+    risk_level: prediction.risk_category,
+    confidence: prediction.risk_score,
+    contributing_factors: prediction.explanation ? { explanation: prediction.explanation } : {},
+    model_version: 'v1.0.0',
+    prediction_date: new Date() // Make sure to include this
+  }
+});
       }
     }
 

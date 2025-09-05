@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
     const worksheet = workbook.Sheets[workbook.SheetNames[0]]
     const rows = XLSX.utils.sheet_to_json(worksheet) as any[]
 
-    const requiredColumns = ['student_id', 'date', 'is_present']
+    const requiredColumns = ['student_id', 'date', 'activity_type']
    
     if (rows.length === 0) {
       return NextResponse.json({ error: 'Empty file' }, { status: 400 })
@@ -57,43 +57,32 @@ export async function POST(req: NextRequest) {
           continue
         }
 
-       
-
-        await prisma.attendance.upsert({
-          where: {
-            studentId_date_subject_code: {
-              studentId: studentProfile.id,
-              date: new Date(row.date),
-              subject_code: row.subject_code || 'default'
-            }
-          },
-          update: {
-            is_present: Boolean(row.is_present)
-          },
-          create: {
+        await prisma.activity.create({
+          data: {
             instituteId: session.user.instituteId,
             studentId: studentProfile.id,
             date: new Date(row.date),
-            is_present: Boolean(row.is_present),
-            subject_code: row.subject_code || 'default',
-            subject_name: row.subject_name ?? undefined
+            activity_type: String(row.activity_type),
+            activity_name: row.activity_name || null,
+            duration: row.duration ? parseInt(row.duration) : null,
+            points: row.points ? parseInt(row.points) : null
           }
         })
         processed++
       } catch (error) {
-        console.error('Error processing attendance row:', row, error)
+        console.error('Error processing activity row:', row, error)
         errors++
       }
     }
 
     return NextResponse.json({
-      message: 'Attendance upload completed',
+      message: 'Activities upload completed',
       processed,
       errors,
       total: rows.length
     })
   } catch (error) {
-    console.error('Attendance upload error:', error)
+    console.error('Activities upload error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

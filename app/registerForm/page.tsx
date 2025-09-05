@@ -18,8 +18,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react'
-import { Header } from '@/components/layout/header'
-import { Navigation } from '@/components/layout/navigations'
+
 
 export default function RegistrationPage() {
   const [activeTab, setActiveTab] = useState('admin')
@@ -58,7 +57,7 @@ export default function RegistrationPage() {
     phone: ''
   })
 
-  const handleSubmit = async (role) => {
+  const handleSubmit = async (role : string) => {
     setLoading(true)
     setMessage({ type: '', text: '' })
 
@@ -100,7 +99,6 @@ export default function RegistrationPage() {
 
   return (
     <div>
-        <Header />
    
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center p-4">
       <div className="w-full max-w-4xl">

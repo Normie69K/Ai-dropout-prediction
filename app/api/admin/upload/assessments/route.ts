@@ -78,9 +78,6 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Trigger notifications for low scores
-    await triggerLowScoreNotifications(session.user.instituteId)
-
     return NextResponse.json({ 
       message: 'Assessment upload completed',
       processed,

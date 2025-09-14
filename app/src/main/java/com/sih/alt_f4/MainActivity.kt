@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Apply the blur and glass effect
         enableBlurEffect()
         binding.bottomNavigation.setBackgroundResource(R.drawable.bg_glass_effect)
 
@@ -29,30 +28,45 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         NavigationUI.setupWithNavController(binding.bottomNavigation, navController)
+
         setupNavigationVisibility()
+        // The call to setupToolbarClicks() has been removed.
     }
 
-    private fun enableBlurEffect() {
-        // Blur effect is only available on Android 12 (API 31) and newer
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            window.setBackgroundBlurRadius(50)
-            window.attributes.flags = window.attributes.flags or
-                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND
-        }
-    }
+    // The setupToolbarClicks() and showPopupMenu() functions have been removed.
 
     private fun setupNavigationVisibility() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.loginFragment -> {
-                    binding.appBarLayout.visibility = View.GONE
+                    binding.appBarLayout.visibility = View.VISIBLE
                     binding.bottomNavigation.visibility = View.GONE
+                    binding.toolbarLayout.apply {
+                        toolbarGenericTitle.visibility = View.VISIBLE
+                        cardInitials.visibility = View.GONE
+                        toolbarTitle.visibility = View.GONE
+                        toolbarSubtitle.visibility = View.GONE
+                    }
                 }
                 else -> {
                     binding.appBarLayout.visibility = View.VISIBLE
                     binding.bottomNavigation.visibility = View.VISIBLE
+                    binding.toolbarLayout.apply {
+                        toolbarGenericTitle.visibility = View.GONE
+                        cardInitials.visibility = View.VISIBLE
+                        toolbarTitle.visibility = View.VISIBLE
+                        toolbarSubtitle.visibility = View.VISIBLE
+                    }
                 }
             }
+        }
+    }
+
+    private fun enableBlurEffect() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            window.setBackgroundBlurRadius(50)
+            window.attributes.flags = window.attributes.flags or
+                    WindowManager.LayoutParams.FLAG_BLUR_BEHIND
         }
     }
 }

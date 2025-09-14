@@ -34,3 +34,9 @@ data class Chapter(
     val chapterTitle: String,
     val pageCount: Int
 )
+
+data class Notification(
+    val title: String,
+    val description: String,
+    val time: String
+)

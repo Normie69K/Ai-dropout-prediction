@@ -20,6 +20,7 @@
     <navigation
         android:id="@+id/main_nav_graph"
         app:startDestination="@id/dashboardFragment">
+
         <fragment
             android:id="@+id/dashboardFragment"
             android:name="com.sih.alt_f4.fragments.DashboardFragment"
@@ -41,4 +42,5 @@
             android:label="CounsellingFragment"
             tools:layout="@layout/fragment_counselling" />
     </navigation>
+
 </navigation>

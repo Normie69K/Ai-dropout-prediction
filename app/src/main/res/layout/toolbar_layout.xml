@@ -6,6 +6,19 @@
     android:layout_height="?attr/actionBarSize"
     android:paddingHorizontal="16dp">
 
+    <TextView
+        android:id="@+id/toolbar_generic_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Student Portal"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textColor="@color/onSurface"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_initials"
         android:layout_width="40dp"
@@ -16,15 +29,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/toolbar_initials"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textColor="@color/onPrimaryContainer"
-            tools:text="AS" />
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -47,32 +51,5 @@
         android:textColor="@color/onSurfaceVariant"
         app:layout_constraintStart_toStartOf="@id/toolbar_title"
         app:layout_constraintTop_toBottomOf="@id/toolbar_title" />
-
-    <ImageView
-        android:id="@+id/icon_menu"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/onSurface" />
-
-    <ImageView
-        android:id="@+id/icon_notifications"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_notifications"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/icon_menu"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/onSurface" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

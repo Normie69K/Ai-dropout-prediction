@@ -23,7 +23,10 @@
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp">
 
-            <include layout="@layout/toolbar_layout" />
+            <include
+                android:id="@+id/toolbar_layout"
+                layout="@layout/toolbar_layout" />
+
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
 

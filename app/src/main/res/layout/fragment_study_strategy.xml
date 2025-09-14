@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    tools:context=".fragments.StudyStrategyFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/alata"
+            android:text="Study Strategy: Computer Networks"
+            android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/alata"
+                    android:text="Important Topics (Previous Year Analysis)"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="OSI &amp; TCP/IP Models" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Routing Algorithms" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Error Detection &amp; Correction" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Network Security" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Protocol Analysis" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/alata"
+                    android:text="Recommended Study Strategy"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Understand protocols layer by layer" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Practice subnetting calculations" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Study real-world network examples" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Focus on routing table calculations" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/outline">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/alata"
+                    android:text="Mumbai University Success Tips"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Start preparation at least 6 weeks before exams" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Previous year question papers are gold - solve minimum 5 years" />
+
+                <TextView
+                    style="@style/BulletPoint"
+                    android:fontFamily="@font/alata"
+                    android:text="Internal assessment carries 20 marks - don't miss any" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_got_it"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/alata"
+            android:paddingVertical="12dp"
+            android:text="Got it, thanks!" />
+    </LinearLayout>
+</ScrollView>

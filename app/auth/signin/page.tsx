@@ -67,7 +67,7 @@ export default function SignInPage() {
           if (userType === 'admin') {
             window.location.href = '/dashboard/admin'
           } else if (userType === 'teacher') {
-            window.location.href = '/dashboard/teacher'
+            window.location.href = '/dashboard/teachers'
           } else {
             window.location.href = '/dashboard/student'
           }
@@ -133,7 +133,7 @@ export default function SignInPage() {
                   <span>Home</span>
                 </Button>
               </Link>
-              <Link href="/registration">
+              <Link href="/auth/signup">
                 <Button variant="outline" size="sm">
                   Sign Up
                 </Button>
@@ -268,7 +268,7 @@ export default function SignInPage() {
 
                 <div className="text-center space-y-4">
                   <p className="text-sm text-muted-foreground">Don't have an account?</p>
-                  <Link href="/registration">
+                  <Link href="/auth/signup" className="w-full">
                     <Button variant="outline" className="w-full h-11">
                       Create New Account
                     </Button>

@@ -1,10 +1,9 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-// import { motion } from "framer-motion"
 import { ChevronRight, Play, Brain, Users, TrendingUp } from "lucide-react"
-import heroImage from "@/public/hero-bg.jpg"
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"
+import heroImage from "@/public/hero-bg1.jpg"
 
 export function Hero() {
   return (
@@ -12,7 +11,7 @@ export function Hero() {
       {/* Background */}
       <div className="absolute inset-0 z-0">
         <img 
-          src={heroImage.src} 
+          src={heroImage} 
           alt="AI Network Background" 
           className="w-full h-full object-cover opacity-20"
         />

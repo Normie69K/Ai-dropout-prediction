@@ -8,435 +8,865 @@ import { Label } from '@/components/ui/label'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { motion } from 'framer-motion'
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, ResponsiveContainer } from 'recharts'
 import {
   Users, Upload, Settings, FileSpreadsheet, AlertTriangle, CheckCircle, Code, School, UserPlus, 
   TrendingUp, BarChart3, Download, LogOut, Brain, Bell, Send, Eye, RefreshCw, 
-  TrendingDown, Activity, GraduationCap, Clock, DollarSign, Mail, MessageSquare, Search
+  TrendingDown, Activity, GraduationCap, Clock, DollarSign, Mail, MessageSquare, Search,
+  Home, Calendar, BookOpen, UserCheck, MapPin, Wifi, Cpu, ShieldCheck, ChevronLeft,
+  Menu, X, Phone, MapPinIcon, Building2, Award, Star, BookMarked, UserX, ChevronRight,
+  Filter, Plus, Edit3, Trash2, MoreVertical
 } from 'lucide-react'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
+import UploadFiles from './UploadFile'
 
-export default function EnhancedAdminDashboard() {
-  const [uploading, setUploading] = useState({
-    students: false,
-    attendance: false,
-    assessments: false,
-    activities: false,
-    fees: false
-  })
-  
-  const [uploadStatus, setUploadStatus] = useState({
-    students: null,
-    attendance: null,
-    assessments: null,
-    activities: null,
-    fees: null
-  })
-
-  const [predictions, setPredictions] = useState([])
-  const [generating, setGenerating] = useState(false)
+export default function ProfessionalInstituteDashboard() {
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [activeTab, setActiveTab] = useState('dashboard')
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedStudent, setSelectedStudent] = useState(null)
+  const [selectedTeacher, setSelectedTeacher] = useState(null)
 
-  // Mock data for demonstration
-  const [dashboardData, setDashboardData] = useState({
-    totalStudents: 2847,
-    atRiskStudents: 142,
-    lowRiskStudents: 2705,
-    avgRiskScore: 0.23,
-    riskDistribution: [
-      { name: 'Low Risk', value: 2705, color: '#10b981' },
-      { name: 'Medium Risk', value: 89, color: '#f59e0b' },
-      { name: 'High Risk', value: 53, color: '#ef4444' }
-    ],
-    monthlyTrends: [
-      { month: 'Jan', risk: 4.2, attendance: 92 },
-      { month: 'Feb', risk: 4.8, attendance: 89 },
-      { month: 'Mar', risk: 5.1, attendance: 87 },
-      { month: 'Apr', risk: 4.9, attendance: 90 },
-      { month: 'May', risk: 5.6, attendance: 85 }
-    ],
-    topRiskFactors: [
-      { factor: 'Low Attendance', count: 89, percentage: 62.7 },
-      { factor: 'Poor Assessment Scores', count: 67, percentage: 47.2 },
-      { factor: 'Fee Payment Delays', count: 45, percentage: 31.7 },
-      { factor: 'Reduced LMS Activity', count: 38, percentage: 26.8 },
-      { factor: 'Late Submissions', count: 29, percentage: 20.4 }
-    ]
+  // Institute Profile
+  const [instituteProfile] = useState({
+    name: "Government Engineering College",
+    code: "GEC-MUM-001",
+    logo: "/api/placeholder/80/80",
+    address: "Powai, Mumbai, Maharashtra 400076",
+    established: "1986",
+    accreditation: "NBA Accredited",
+    website: "www.gecmumbai.edu.in",
+    totalCapacity: 3000,
+    currentStrength: 2847
   })
 
-  const [mockPredictions] = useState([
+  // Dashboard Statistics
+  const [dashboardStats] = useState({
+    totalStudents: 2847,
+    activeStudents: 2705,
+    atRiskStudents: 142,
+    totalFaculty: 89,
+    departments: 6,
+    placementRate: 78.2,
+    attendanceRate: 87.5,
+    avgCGPA: 7.8,
+    campusArea: "120 acres",
+    libraryBooks: "45,000+"
+  })
+
+  // Student Data with Enhanced Details
+  const [studentsData] = useState([
     {
-      student_id: "STU001",
-      name: "Amit Kumar",
-      email: "amit.kumar@student.edu",
+      id: "GEC2023001",
+      name: "Amit Kumar Sharma",
+      email: "amit.sharma@student.gecmumbai.edu.in",
       phone: "+91 9876543210",
-      course: "Computer Science",
-      risk_score: 0.85,
-      risk_category: "High Risk",
-      explanation: "Risk increased by: `overall_attendance_pct` of 45.2%, `avg_score_pct` of 32.1%, `payment_delay` of 45 days.",
+      course: "Computer Science Engineering",
+      semester: "6th Semester",
+      year: "3rd Year",
+      rollNo: "CSE/2021/001",
+      admissionYear: "2021",
+      dateOfBirth: "15/03/2003",
+      address: "Mumbai, Maharashtra",
+      fatherName: "Rajesh Kumar Sharma",
+      motherName: "Sunita Sharma",
+      parentContact: "+91 9876543200",
+      guardianEmail: "rajesh.sharma@gmail.com",
+      riskScore: 0.85,
+      riskCategory: "High Risk",
       attendance: 45.2,
-      avgScore: 32.1,
-      lastLogin: "2024-08-25"
+      cgpa: 5.2,
+      sgpa: 4.8,
+      backlogs: 3,
+      totalCredits: 120,
+      completedCredits: 88,
+      mentor: "Dr. Rajesh Sharma",
+      lastLogin: "2024-08-25",
+      feeStatus: "Pending",
+      hostelResident: true,
+      bloodGroup: "B+",
+      category: "General",
+      nationality: "Indian",
+      achievements: ["Programming Contest Winner", "Tech Fest Participant"],
+      skills: ["Python", "Java", "React", "Node.js"]
     },
     {
-      student_id: "STU002", 
-      name: "Priya Sharma",
-      email: "priya.sharma@student.edu",
+      id: "GEC2023002",
+      name: "Priya Sharma Patel",
+      email: "priya.patel@student.gecmumbai.edu.in",
       phone: "+91 9876543211",
       course: "Mechanical Engineering",
-      risk_score: 0.72,
-      risk_category: "High Risk", 
-      explanation: "Risk increased by: `avg_submission_delay` of 8.5 days, `lms_logins` of 12, `overall_attendance_pct` of 68.3%.",
-      attendance: 68.3,
-      avgScore: 58.2,
-      lastLogin: "2024-08-23"
+      semester: "4th Semester",
+      year: "2nd Year",
+      rollNo: "MECH/2022/015",
+      admissionYear: "2022",
+      dateOfBirth: "22/07/2004",
+      address: "Pune, Maharashtra",
+      fatherName: "Suresh Patel",
+      motherName: "Kavita Patel",
+      parentContact: "+91 9876543201",
+      guardianEmail: "suresh.patel@gmail.com",
+      riskScore: 0.32,
+      riskCategory: "Low Risk",
+      attendance: 92.1,
+      cgpa: 8.4,
+      sgpa: 8.6,
+      backlogs: 0,
+      totalCredits: 80,
+      completedCredits: 76,
+      mentor: "Prof. Anita Desai",
+      lastLogin: "2024-08-30",
+      feeStatus: "Paid",
+      hostelResident: false,
+      bloodGroup: "A+",
+      category: "OBC",
+      nationality: "Indian",
+      achievements: ["Academic Excellence Award", "Best Project Award"],
+      skills: ["AutoCAD", "SolidWorks", "MATLAB", "Thermodynamics"]
     },
     {
-      student_id: "STU003",
-      name: "Rahul Patel",
-      email: "rahul.patel@student.edu", 
+      id: "GEC2023003",
+      name: "Rahul Patel Singh",
+      email: "rahul.singh@student.gecmumbai.edu.in",
       phone: "+91 9876543212",
       course: "Electrical Engineering",
-      risk_score: 0.15,
-      risk_category: "Low Risk",
-      explanation: null,
-      attendance: 92.1,
-      avgScore: 78.9,
-      lastLogin: "2024-08-30"
+      semester: "8th Semester",
+      year: "4th Year",
+      rollNo: "EEE/2020/045",
+      admissionYear: "2020",
+      dateOfBirth: "10/11/2002",
+      address: "Nashik, Maharashtra",
+      fatherName: "Vijay Singh",
+      motherName: "Meera Singh",
+      parentContact: "+91 9876543202",
+      guardianEmail: "vijay.singh@gmail.com",
+      riskScore: 0.15,
+      riskCategory: "Low Risk",
+      attendance: 89.7,
+      cgpa: 9.1,
+      sgpa: 9.3,
+      backlogs: 0,
+      totalCredits: 160,
+      completedCredits: 158,
+      mentor: "Dr. Suresh Kumar",
+      lastLogin: "2024-08-30",
+      feeStatus: "Paid",
+      hostelResident: true,
+      bloodGroup: "O+",
+      category: "General",
+      nationality: "Indian",
+      achievements: ["University Topper", "Research Paper Published", "Scholarship Recipient"],
+      skills: ["Circuit Design", "Power Systems", "MATLAB", "PLC Programming"]
     }
   ])
 
-  // Add this to your component to debug the upload process
-useEffect(() => {
-  console.log('Upload status changed:', uploadStatus);
-}, [uploadStatus]);
-
-useEffect(() => {
-  console.log('Uploading states changed:', uploading);
-}, [uploading]);
-
-  useEffect(() => {
-  console.log('Predictions updated:', predictions);
-  // This will log whenever predictions change
-}, [predictions]);
-
-  // Add this useEffect to fetch predictions on component mount
-useEffect(() => {
-  const fetchPredictions = async () => {
-    try {
-      const response = await fetch('/api/admin/predictions')
-      if (response.ok) {
-        const data = await response.json()
-        setPredictions(data.predictions)
-      }
-    } catch (error) {
-      console.error('Failed to fetch predictions:', error)
+  // Faculty Data with Complete Details
+  const [facultyData] = useState([
+    {
+      id: "FAC001",
+      name: "Dr. Rajesh Kumar Sharma",
+      designation: "Professor & Head",
+      department: "Computer Science Engineering",
+      email: "rajesh.sharma@gecmumbai.edu.in",
+      phone: "+91 9876543301",
+      officeRoom: "CS-101",
+      experience: "15 years",
+      qualification: "Ph.D. in Computer Science",
+      specialization: "Machine Learning, Data Mining",
+      dateOfJoining: "15/08/2009",
+      dateOfBirth: "25/05/1975",
+      address: "Bandra, Mumbai, Maharashtra",
+      employeeId: "GEC-CS-001",
+      salary: "₹1,25,000",
+      bloodGroup: "AB+",
+      maritalStatus: "Married",
+      emergencyContact: "+91 9876543300",
+      subjects: ["Data Structures", "Machine Learning", "Database Systems"],
+      mentees: 25,
+      researchPapers: 45,
+      awards: ["Best Faculty Award 2023", "Research Excellence Award"],
+      currentProjects: ["AI in Education", "Smart Campus Initiative"]
+    },
+    {
+      id: "FAC002",
+      name: "Prof. Anita Desai Patel",
+      designation: "Associate Professor",
+      department: "Mechanical Engineering",
+      email: "anita.patel@gecmumbai.edu.in",
+      phone: "+91 9876543302",
+      officeRoom: "MECH-205",
+      experience: "12 years",
+      qualification: "M.Tech in Thermal Engineering",
+      specialization: "Heat Transfer, Thermodynamics",
+      dateOfJoining: "10/07/2012",
+      dateOfBirth: "15/09/1980",
+      address: "Andheri, Mumbai, Maharashtra",
+      employeeId: "GEC-MECH-002",
+      salary: "₹95,000",
+      bloodGroup: "B+",
+      maritalStatus: "Married",
+      emergencyContact: "+91 9876543305",
+      subjects: ["Thermodynamics", "Heat Transfer", "Fluid Mechanics"],
+      mentees: 30,
+      researchPapers: 28,
+      awards: ["Teaching Excellence Award 2022"],
+      currentProjects: ["Green Energy Solutions", "Waste Heat Recovery"]
+    },
+    {
+      id: "FAC003",
+      name: "Dr. Suresh Kumar Mishra",
+      designation: "Professor",
+      department: "Electrical Engineering",
+      email: "suresh.mishra@gecmumbai.edu.in",
+      phone: "+91 9876543303",
+      officeRoom: "EEE-301",
+      experience: "18 years",
+      qualification: "Ph.D. in Electrical Engineering",
+      specialization: "Power Systems, Renewable Energy",
+      dateOfJoining: "20/06/2006",
+      dateOfBirth: "30/12/1972",
+      address: "Powai, Mumbai, Maharashtra",
+      employeeId: "GEC-EEE-003",
+      salary: "₹1,35,000",
+      bloodGroup: "O-",
+      maritalStatus: "Married",
+      emergencyContact: "+91 9876543308",
+      subjects: ["Power Systems", "Electrical Machines", "Renewable Energy"],
+      mentees: 22,
+      researchPapers: 52,
+      awards: ["Outstanding Researcher Award 2023", "Best Mentor Award 2022"],
+      currentProjects: ["Smart Grid Implementation", "Solar Power Optimization"]
     }
-  }
-  
-  fetchPredictions()
-}, [])
+  ])
 
-// // Replace the mockPredictions with actual predictions
-// const filteredPredictions = predictions.filter(p => 
-//   p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//   p.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//   p.course.toLowerCase().includes(searchTerm.toLowerCase())
-// )
-
-  const fileRefs = {
-    students: useRef(null),
-    attendance: useRef(null),
-    assessments: useRef(null),
-    activities: useRef(null),
-    fees: useRef(null)
-  }
-
-  const handleFileUpload = async (type, file) => {
-
-    // Validate file type
-  const validTypes = ['.xlsx', '.xls', '.csv'];
-  const fileExtension = file.name.split('.').pop().toLowerCase();
-  
-  if (!validTypes.includes(`.${fileExtension}`)) {
-    alert('Please upload only Excel or CSV files');
-    setUploadStatus(prev => ({ ...prev, [type]: 'error' }));
-    return;
-  }
-
-  // Validate file size (e.g., 10MB max)
-  if (file.size > 10 * 1024 * 1024) {
-    alert('File size too large. Maximum size is 10MB');
-    setUploadStatus(prev => ({ ...prev, [type]: 'error' }));
-    return;
-  }
-
-  if (!file) return;
-
-  setUploading(prev => ({ ...prev, [type]: true }));
-  setUploadStatus(prev => ({ ...prev, [type]: null }));
-
-  try {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    const response = await fetch(`/api/admin/upload/${type}`, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    
-    if (result.error) {
-      throw new Error(result.error);
-    }
-
-    setUploadStatus(prev => ({ ...prev, [type]: 'success' }));
-    checkAndGeneratePredictions();
-    
-  } catch (error) {
-    console.error(`${type} upload error:`, error);
-    setUploadStatus(prev => ({ ...prev, [type]: 'error' }));
-    alert(`Upload failed: ${error.message}`);
-  } finally {
-    setUploading(prev => ({ ...prev, [type]: false }));
-  }
-}
-
-  const checkAndGeneratePredictions = () => {
-  const allUploaded = Object.values(uploadStatus).every(status => status === 'success');
-  const anyFailed = Object.values(uploadStatus).some(status => status === 'error');
-  
-  if (allUploaded) {
-    setTimeout(() => generatePredictions(), 1000);
-  } else if (anyFailed) {
-    alert('Some files failed to upload. Please fix errors before generating predictions.');
-  }
-};
-
- const generatePredictions = async () => {
-  setGenerating(true);
-  console.log('Starting prediction generation...');
-
-  const hasData = predictions.length > 0 || Object.values(uploadStatus).some(status => status === 'success');
-  
-  if (!hasData) {
-    alert('Please upload all required files before generating predictions.');
-    return;
-  }
-
-
-  try {
-    const response = await fetch('/api/admin/predict', {
-      method: 'POST'
-    });
-    
-    if (response.ok) {
-      const data = await response.json();
-      console.log('Predictions API response:', data);
-      setPredictions(data.predictions);
-    } else {
-      const errorData = await response.json();
-      console.error('Prediction generation failed:', errorData);
-      alert('Failed to generate predictions: ' + (errorData.error || 'Unknown error'));
-    }
-  } catch (error) {
-    console.error('Failed to generate predictions:', error);
-    alert('Network error when generating predictions');
-  } finally {
-    setGenerating(false);
-  }
-}
-
-  const sendNotification = async (studentId, type) => {
-    try {
-      await fetch('/api/admin/notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ studentId, type })
-      })
-      alert(`${type} notification sent successfully!`)
-    } catch (error) {
-      alert(`Failed to send ${type} notification`)
-    }
-  }
-
-  // const filteredPredictions = mockPredictions.filter(p => 
-  //   p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   p.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //   p.course.toLowerCase().includes(searchTerm.toLowerCase())
-  // )
-
-  // Update this based on your actual API response structure
-const filteredPredictions = predictions.filter(p => 
-  p && p.name && p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  p.student_id && p.student_id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  p.course && p.course.toLowerCase().includes(searchTerm.toLowerCase())
-);
-
-const highRiskStudents = filteredPredictions.filter(p => p && p.risk_score > 0.5);
-
-  const uploadCards = [
-    { key: 'students', title: 'Student Master Data', description: 'Upload students.xlsx with student profiles', icon: Users },
-    { key: 'attendance', title: 'Attendance Records', description: 'Upload attendance.xlsx with daily attendance', icon: CheckCircle },
-    { key: 'assessments', title: 'Assessment Scores', description: 'Upload assessments.xlsx with exam scores', icon: BarChart3 },
-    { key: 'activities', title: 'Student Activities', description: 'Upload activities.xlsx with extracurricular data', icon: TrendingUp },
-    { key: 'fees', title: 'Fee Records', description: 'Upload fees.xlsx with payment information', icon: FileSpreadsheet }
+  // Analytics Data
+  const attendanceData = [
+    { month: 'Jan', attendance: 89 },
+    { month: 'Feb', attendance: 92 },
+    { month: 'Mar', attendance: 88 },
+    { month: 'Apr', attendance: 91 },
+    { month: 'May', attendance: 87 },
+    { month: 'Jun', attendance: 89 }
   ]
 
+  //DASHBOARD CHART 
+  const [dashboardData, setDashboardData] = useState({
+      totalStudents: 2847,
+      atRiskStudents: 142,
+      lowRiskStudents: 2705,
+      avgRiskScore: 0.23,
+      riskDistribution: [
+        { name: 'Low Risk', value: 2705, color: '#10b981' },
+        { name: 'Medium Risk', value: 89, color: '#f59e0b' },
+        { name: 'High Risk', value: 53, color: '#ef4444' }
+      ],
+      monthlyTrends: [
+        { month: 'Jan', risk: 4.2, attendance: 92 },
+        { month: 'Feb', risk: 4.8, attendance: 89 },
+        { month: 'Mar', risk: 5.1, attendance: 87 },
+        { month: 'Apr', risk: 4.9, attendance: 90 },
+        { month: 'May', risk: 5.6, attendance: 85 }
+      ],
+      topRiskFactors: [
+        { factor: 'Low Attendance', count: 89, percentage: 62.7 },
+        { factor: 'Poor Assessment Scores', count: 67, percentage: 47.2 },
+        { factor: 'Fee Payment Delays', count: 45, percentage: 31.7 },
+        { factor: 'Reduced LMS Activity', count: 38, percentage: 26.8 },
+        { factor: 'Late Submissions', count: 29, percentage: 20.4 }
+      ]
+    })
+
+  const departmentData = [
+    { name: 'Computer Science', students: 850, color: '#3b82f6' },
+    { name: 'Mechanical', students: 720, color: '#10b981' },
+    { name: 'Electrical', students: 680, color: '#f59e0b' },
+    { name: 'Civil', students: 597, color: '#ef4444' }
+  ]
+
+  const riskData = [
+    { name: 'Low Risk', value: 2405, color: '#10b981' },
+    { name: 'Medium Risk', value: 300, color: '#f59e0b' },
+    { name: 'High Risk', value: 142, color: '#ef4444' }
+  ]
+
+  const sidebarItems = [
+    { id: 'dashboard', label: 'Dashboard', icon: Home },
+    { id: 'students', label: 'Students', icon: Users },
+    { id: 'faculty', label: 'Faculty', icon: GraduationCap },
+    { id: 'academics', label: 'Academics', icon: BookOpen },
+    { id: 'attendance', label: 'Attendance', icon: UserCheck },
+    { id: 'assessments', label: 'Assessments', icon: FileSpreadsheet },
+    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'communications', label: 'Communications', icon: MessageSquare },
+    { id: 'uploadfile', label: 'Upload File', icon: MessageSquare },
+    { id: 'reports', label: 'Reports', icon: Download },
+    { id: 'settings', label: 'Settings', icon: Settings }
+  ]
+
+  const filteredStudents = studentsData.filter(student =>
+    student.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.course.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    student.rollNo.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const filteredFaculty = facultyData.filter(teacher =>
+    teacher.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    teacher.department.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    teacher.designation.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
+  const getRiskBadgeVariant = (riskCategory) => {
+    switch (riskCategory) {
+      case 'High Risk': return 'destructive'
+      case 'Medium Risk': return 'secondary'
+      case 'Low Risk': return 'default'
+      default: return 'outline'
+    }
+  }
+
+  const StatCard = ({ title, value, subtitle, icon: Icon, trend, color = "default" }) => (
+    <Card className="hover:shadow-lg transition-all duration-300">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-gray-600">{title}</p>
+            <div className="space-y-1">
+              <p className="text-3xl font-bold text-gray-900">{value}</p>
+              {subtitle && (
+                <p className="text-sm text-gray-500">{subtitle}</p>
+              )}
+              {trend && (
+                <div className="flex items-center space-x-1">
+                  {trend > 0 ? (
+                    <TrendingUp className="h-4 w-4 text-green-600" />
+                  ) : (
+                    <TrendingDown className="h-4 w-4 text-red-600" />
+                  )}
+                  <span className={`text-sm font-medium ${trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {Math.abs(trend)}%
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="p-3 rounded-full bg-blue-50">
+            <Icon className="h-6 w-6 text-blue-600" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm"
-      >
-        <div className="container mx-auto px-6 py-4">
+    <div className="flex h-screen bg-gray-50 mb-30">
+      {/* Sidebar */}
+      <div className={`bg-white shadow-xl transition-all duration-300 ${sidebarCollapsed ? 'w-16' : 'w-64'} flex flex-col`}>
+        {/* Sidebar Header */}
+        <div className="p-4 border-b">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
+            {!sidebarCollapsed && (
               <div className="flex items-center space-x-3">
-                <Brain className="h-10 w-10 text-blue-600" />
+                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                  <School className="h-6 w-6 text-white" />
+                </div>
                 <div>
-                  <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    EduEWS Admin
-                  </h1>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">AI-Powered Student Analytics</p>
+                  <h1 className="text-lg font-bold text-gray-900">GEC Mumbai</h1>
+                  <p className="text-xs text-gray-500">Admin Panel</p>
                 </div>
               </div>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+              className="p-2"
+            >
+              {sidebarCollapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 space-y-2">
+          {sidebarItems.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors ${
+                activeTab === item.id
+                  ? 'bg-blue-50 text-blue-700 border-r-2 border-blue-700'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              }`}
+            >
+              <item.icon className="h-5 w-5 flex-shrink-0" />
+              {!sidebarCollapsed && <span className="font-medium">{item.label}</span>}
+            </button>
+          ))}
+        </nav>
+
+        {/* Profile Section */}
+        <div className="p-4 border-t">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-gray-300 rounded-full"></div>
+            {!sidebarCollapsed && (
+              <div className="flex-1">
+                <p className="text-sm font-medium text-gray-900">Admin User</p>
+                <p className="text-xs text-gray-500">Super Admin</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 overflow-hidden">
+        {/* Top Header */}
+        <header className="bg-white shadow-sm border-b px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900 capitalize">{activeTab}</h2>
+              <p className="text-sm text-gray-500">Manage your institute efficiently</p>
             </div>
-            
             <div className="flex items-center space-x-4">
-              <Badge variant="outline" className="flex items-center space-x-2 px-3 py-2 bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-700">
-                <Code className="h-4 w-4 text-blue-600" />
-                <span className="text-blue-600 font-medium">Institute: EDU001</span>
-              </Badge>
-              
-              <Button 
-                variant="ghost" 
-                size="sm"
-                className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/30"
-              >
+              <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span>Live Data</span>
+              </div>
+              <Button variant="outline" size="sm">
+                <Bell className="h-4 w-4 mr-2" />
+                Notifications
+              </Button>
+              <Button variant="outline" size="sm">
                 <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+                <Link href='/'>Logout</Link>
               </Button>
             </div>
           </div>
-        </div>
-      </motion.div>
+        </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-6 py-8">
-        <Tabs defaultValue="analytics" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white dark:bg-slate-800 shadow-sm">
-            <TabsTrigger value="analytics" className="flex items-center space-x-2">
-              <BarChart3 className="h-4 w-4" />
-              <span>AI Analytics</span>
-            </TabsTrigger>
-            <TabsTrigger value="uploads" className="flex items-center space-x-2">
-              <Upload className="h-4 w-4" />
-              <span>Data Uploads</span>
-            </TabsTrigger>
-            <TabsTrigger value="students" className="flex items-center space-x-2">
-              <Users className="h-4 w-4" />
-              <span>Student Details</span>
-            </TabsTrigger>
-            <TabsTrigger value="config" className="flex items-center space-x-2">
-              <Settings className="h-4 w-4" />
-              <span>Configuration</span>
-            </TabsTrigger>
-          </TabsList>
+        {/* Content Area */}
+        <div className="p-6 overflow-y-auto h-full">
+          {/* Dashboard Tab */}
+          {activeTab === 'dashboard' && (
+            <div className="space-y-6">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <StatCard
+                  title="Total Students"
+                  value={dashboardStats.totalStudents.toLocaleString()}
+                  subtitle={`${dashboardStats.departments} Departments`}
+                  icon={Users}
+                  trend={5.2}
+                />
+                <StatCard
+                  title="Faculty Members"
+                  value={dashboardStats.totalFaculty.toString()}
+                  subtitle="Active Faculty"
+                  icon={GraduationCap}
+                  trend={2.1}
+                />
+                <StatCard
+                  title="At-Risk Students"
+                  value={dashboardStats.atRiskStudents.toString()}
+                  subtitle={`${(dashboardStats.atRiskStudents / dashboardStats.totalStudents * 100).toFixed(1)}% of total`}
+                  icon={AlertTriangle}
+                  trend={-3.1}
+                />
+                <StatCard
+                  title="Placement Rate"
+                  value={`${dashboardStats.placementRate}%`}
+                  subtitle="Current Academic Year"
+                  icon={Award}
+                  trend={4.7}
+                />
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            {/* Risk Distribution Pie Chart */}
+                            <motion.div
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.2 }}
+                            >
+                              <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
+                                <CardHeader>
+                                  <CardTitle className="flex items-center space-x-2">
+                                    <BarChart3 className="h-5 w-5 text-blue-600" />
+                                    <span>Risk Distribution</span>
+                                  </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <ResponsiveContainer width="100%" height={300}>
+                                    <PieChart>
+                                      <Pie
+                                        data={dashboardData.riskDistribution}
+                                        cx="50%"
+                                        cy="50%"
+                                        outerRadius={100}
+                                        fill="#8884d8"
+                                        dataKey="value"
+                                        label={({ name, percentage }) => `${name}: ${percentage}%`}
+                                      >
+                                        {dashboardData.riskDistribution.map((entry, index) => (
+                                          <Cell key={`cell-${index}`} fill={entry.color} />
+                                        ))}
+                                      </Pie>
+                                      <Tooltip />
+                                    </PieChart>
+                                  </ResponsiveContainer>
+                                </CardContent>
+                              </Card>
+                            </motion.div>
+              
+                            {/* Monthly Trends */}
+                            <motion.div
+                              initial={{ opacity: 0, x: 20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.3 }}
+                            >
+                              <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
+                                <CardHeader>
+                                  <CardTitle className="flex items-center space-x-2">
+                                    <TrendingUp className="h-5 w-5 text-green-600" />
+                                    <span>Monthly Trends</span>
+                                  </CardTitle>
+                                </CardHeader>
+                                <CardContent>
+                                  <ResponsiveContainer width="100%" height={300}>
+                                    <LineChart data={dashboardData.monthlyTrends}>
+                                      <CartesianGrid strokeDasharray="3 3" />
+                                      <XAxis dataKey="month" />
+                                      <YAxis />
+                                      <Tooltip />
+                                      <Legend />
+                                      <Line type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} name="Risk %" />
+                                      <Line type="monotone" dataKey="attendance" stroke="#10b981" strokeWidth={3} name="Attendance %" />
+                                    </LineChart>
+                                  </ResponsiveContainer>
+                                </CardContent>
+                              </Card>
+                            </motion.div>
+              </div>
 
-          {/* AI Analytics Tab */}
-          <TabsContent value="analytics" className="space-y-8">
-            {/* Key Metrics */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="grid grid-cols-1 md:grid-cols-4 gap-6"
-            >
-              <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-none shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-blue-100 text-sm font-medium">Total Students</p>
-                      <p className="text-3xl font-bold">{dashboardData.totalStudents.toLocaleString()}</p>
-                    </div>
-                    <Users className="h-8 w-8 text-blue-200" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-red-500 to-red-600 text-white border-none shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-red-100 text-sm font-medium">High Risk Students</p>
-                      <p className="text-3xl font-bold">{dashboardData.atRiskStudents}</p>
-                    </div>
-                    <AlertTriangle className="h-8 w-8 text-red-200" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-none shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-green-100 text-sm font-medium">Low Risk Students</p>
-                      <p className="text-3xl font-bold">{dashboardData.lowRiskStudents}</p>
-                    </div>
-                    <CheckCircle className="h-8 w-8 text-green-200" />
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-none shadow-lg">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-purple-100 text-sm font-medium">Avg Risk Score</p>
-                      <p className="text-3xl font-bold">{(dashboardData.avgRiskScore * 100).toFixed(1)}%</p>
-                    </div>
-                    <Brain className="h-8 w-8 text-purple-200" />
-                  </div>
-                </CardContent>
-              </Card>
-            </motion.div>
-
-            {/* Charts Section */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Risk Distribution Pie Chart */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 }}
-              >
-                <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
+              {/* Institute Overview */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center space-x-2">
-                      <BarChart3 className="h-5 w-5 text-blue-600" />
-                      <span>Risk Distribution</span>
+                      <Building2 className="h-5 w-5 text-blue-600" />
+                      <span>Institute Overview</span>
                     </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>
+                        <p className="text-gray-500">Established</p>
+                        <p className="font-semibold">{instituteProfile.established}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Campus Area</p>
+                        <p className="font-semibold">{dashboardStats.campusArea}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Total Capacity</p>
+                        <p className="font-semibold">{instituteProfile.totalCapacity.toLocaleString()}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Library Books</p>
+                        <p className="font-semibold">{dashboardStats.libraryBooks}</p>
+                      </div>
+                    </div>
+                    <div className="pt-4 border-t">
+                      <p className="text-gray-500">Address</p>
+                      <p className="font-medium">{instituteProfile.address}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <Activity className="h-5 w-5 text-green-600" />
+                      <span>Live Campus Metrics</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center p-4 rounded-lg bg-blue-50">
+                        <div className="text-2xl font-bold text-blue-700">{dashboardStats.attendanceRate}%</div>
+                        <div className="text-sm text-blue-600">Attendance Rate</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-green-50">
+                        <div className="text-2xl font-bold text-green-700">{dashboardStats.avgCGPA}</div>
+                        <div className="text-sm text-green-600">Average CGPA</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-purple-50">
+                        <div className="text-2xl font-bold text-purple-700">1,245</div>
+                        <div className="text-sm text-purple-600">Online Students</div>
+                      </div>
+                      <div className="text-center p-4 rounded-lg bg-orange-50">
+                        <div className="text-2xl font-bold text-orange-700">67</div>
+                        <div className="text-sm text-orange-600">Active Faculty</div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Students Tab */}
+          {activeTab === 'students' && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Student Management</h3>
+                  <p className="text-sm text-gray-600">Manage student profiles and academic records</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search students..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 w-64"
+                    />
+                  </div>
+                  <Button>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Add Student
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredStudents.map((student) => (
+                  <Card key={student.id} className="hover:shadow-lg transition-all duration-300">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <CardTitle className="text-lg font-semibold">{student.name}</CardTitle>
+                          <div className="space-y-1">
+                            <p className="text-sm text-gray-600">{student.rollNo}</p>
+                            <p className="text-sm text-gray-600">{student.course}</p>
+                            <p className="text-xs text-gray-500">{student.semester} • {student.year}</p>
+                          </div>
+                        </div>
+                        <Badge variant={getRiskBadgeVariant(student.riskCategory)}>
+                          {student.riskCategory}
+                        </Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-3 gap-3 text-center">
+                        <div className="space-y-1">
+                          <p className="text-lg font-bold text-blue-600">{student.cgpa}</p>
+                          <p className="text-xs text-gray-500">CGPA</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-lg font-bold text-green-600">{student.attendance}%</p>
+                          <p className="text-xs text-gray-500">Attendance</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-lg font-bold text-red-600">{student.backlogs}</p>
+                          <p className="text-xs text-gray-500">Backlogs</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Mentor:</span>
+                          <span className="font-medium">{student.mentor}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Fee Status:</span>
+                          <Badge variant={student.feeStatus === 'Paid' ? 'default' : 'destructive'}>
+                            {student.feeStatus}
+                          </Badge>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Hostel:</span>
+                          <span className="font-medium">{student.hostelResident ? 'Yes' : 'No'}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Mail className="h-3 w-3 mr-1" />
+                          Email
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Phone className="h-3 w-3 mr-1" />
+                          Call
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setSelectedStudent(student)}
+                        >
+                          <Eye className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Faculty Tab */}
+          {activeTab === 'faculty' && (
+            <div className="space-y-6">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Faculty Management</h3>
+                  <p className="text-sm text-gray-600">Manage faculty profiles and academic assignments</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                    <Input
+                      placeholder="Search faculty..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 w-64"
+                    />
+                  </div>
+                  <Button>
+                    <UserPlus className="h-4 w-4 mr-2" />
+                    Add Faculty
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredFaculty.map((teacher) => (
+                  <Card key={teacher.id} className="hover:shadow-lg transition-all duration-300">
+                    <CardHeader className="pb-3">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <CardTitle className="text-lg font-semibold">{teacher.name}</CardTitle>
+                          <p className="text-sm text-gray-600">{teacher.designation}</p>
+                          <p className="text-sm text-blue-600 font-medium">{teacher.department}</p>
+                          <p className="text-xs text-gray-500">Employee ID: {teacher.employeeId}</p>
+                        </div>
+                        <Badge variant="outline">{teacher.experience}</Badge>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-3 text-center">
+                        <div className="space-y-1">
+                          <p className="text-lg font-bold text-blue-600">{teacher.mentees}</p>
+                          <p className="text-xs text-gray-500">Mentees</p>
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-lg font-bold text-green-600">{teacher.researchPapers}</p>
+                          <p className="text-xs text-gray-500">Papers</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Office:</span>
+                          <span className="font-medium">{teacher.officeRoom}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Specialization:</span>
+                          <span className="font-medium text-right">{teacher.specialization}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Mail className="h-3 w-3 mr-1" />
+                          Email
+                        </Button>
+                        <Button size="sm" variant="outline" className="flex-1">
+                          <Phone className="h-3 w-3 mr-1" />
+                          Call
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => setSelectedTeacher(teacher)}
+                        >
+                          <Eye className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Analytics Tab */}
+          {activeTab === 'uploadfile' && (
+           <div className="space-y-6">
+            <UploadFiles/>
+            </div>
+          )}
+
+          {/* Analytics Tab */}
+          {activeTab === 'analytics' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Analytics Dashboard</h3>
+                  <p className="text-sm text-gray-600">Comprehensive insights and data visualization</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Button variant="outline" size="sm">
+                    <RefreshCw className="h-4 w-4 mr-2" />
+                    Refresh Data
+                  </Button>
+                  <Button variant="outline" size="sm">
+                    <Download className="h-4 w-4 mr-2" />
+                    Export Report
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Attendance Trends</CardTitle>
+                    <CardDescription>Monthly attendance rate over the semester</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={300}>
+                      <LineChart data={attendanceData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="month" />
+                        <YAxis />
+                        <Tooltip />
+                        <Line type="monotone" dataKey="attendance" stroke="#3b82f6" strokeWidth={2} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Student Risk Distribution</CardTitle>
+                    <CardDescription>Risk category breakdown of all students</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
                       <PieChart>
                         <Pie
-                          data={dashboardData.riskDistribution}
+                          data={riskData}
                           cx="50%"
                           cy="50%"
-                          outerRadius={100}
+                          labelLine={false}
+                          label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                          outerRadius={80}
                           fill="#8884d8"
                           dataKey="value"
-                          label={({ name, percentage }) => `${name}: ${percentage}%`}
                         >
-                          {dashboardData.riskDistribution.map((entry, index) => (
+                          {riskData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
@@ -445,450 +875,353 @@ const highRiskStudents = filteredPredictions.filter(p => p && p.risk_score > 0.5
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
-              </motion.div>
 
-              {/* Monthly Trends */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 }}
-              >
-                <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <TrendingUp className="h-5 w-5 text-green-600" />
-                      <span>Monthly Trends</span>
-                    </CardTitle>
+                    <CardTitle>Department-wise Students</CardTitle>
+                    <CardDescription>Student distribution across departments</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <ResponsiveContainer width="100%" height={300}>
-                      <LineChart data={dashboardData.monthlyTrends}>
+                      <BarChart data={departmentData}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
+                        <XAxis dataKey="name" />
                         <YAxis />
                         <Tooltip />
-                        <Legend />
-                        <Line type="monotone" dataKey="risk" stroke="#ef4444" strokeWidth={3} name="Risk %" />
-                        <Line type="monotone" dataKey="attendance" stroke="#10b981" strokeWidth={3} name="Attendance %" />
-                      </LineChart>
+                        <Bar dataKey="students" fill="#3b82f6" />
+                      </BarChart>
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
-              </motion.div>
-            </div>
 
-            {/* Top Risk Factors */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Key Performance Indicators</CardTitle>
+                    <CardDescription>Important metrics at a glance</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                      <span className="font-medium">Average CGPA</span>
+                      <span className="text-2xl font-bold text-blue-600">7.8</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                      <span className="font-medium">Pass Rate</span>
+                      <span className="text-2xl font-bold text-green-600">94.2%</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+                      <span className="font-medium">Dropout Rate</span>
+                      <span className="text-2xl font-bold text-orange-600">2.1%</span>
+                    </div>
+                    <div className="flex justify-between items-center p-3 bg-purple-50 rounded-lg">
+                      <span className="font-medium">Faculty-Student Ratio</span>
+                      <span className="text-2xl font-bold text-purple-600">1:32</span>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+
+          {/* Attendance Tab */}
+          {activeTab === 'attendance' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">Attendance Management</h3>
+                  <p className="text-sm text-gray-600">Monitor and manage student attendance</p>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Button variant="outline" size="sm">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Today's Report
+                  </Button>
+                  <Button>
+                    <UserCheck className="h-4 w-4 mr-2" />
+                    Mark Attendance
+                  </Button>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Today's Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Present</span>
+                        <span className="text-lg font-bold text-green-600">2,456</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Absent</span>
+                        <span className="text-lg font-bold text-red-600">391</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-600">Late</span>
+                        <span className="text-lg font-bold text-orange-600">67</span>
+                      </div>
+                      <div className="pt-2 border-t">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium">Attendance Rate</span>
+                          <span className="text-xl font-bold text-blue-600">86.3%</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Weekly Trends</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      {['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'].map((day, index) => {
+                        const rates = [89, 87, 85, 88, 84]
+                        return (
+                          <div key={day} className="flex items-center justify-between">
+                            <span className="text-sm text-gray-600">{day}</span>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div 
+                                  className="h-full bg-blue-500 rounded-full" 
+                                  style={{ width: `${rates[index]}%` }}
+                                ></div>
+                              </div>
+                              <span className="text-sm font-medium">{rates[index]}%</span>
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg">Alert Summary</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <Alert className="border-red-200 bg-red-50">
+                        <AlertTriangle className="h-4 w-4 text-red-600" />
+                        <AlertDescription className="text-red-800">
+                          <strong>67 students</strong> with attendance below 75%
+                        </AlertDescription>
+                      </Alert>
+                      <Alert className="border-orange-200 bg-orange-50">
+                        <Clock className="h-4 w-4 text-orange-600" />
+                        <AlertDescription className="text-orange-800">
+                          <strong>23 students</strong> frequently late this week
+                        </AlertDescription>
+                      </Alert>
+                      <Alert className="border-blue-200 bg-blue-50">
+                        <CheckCircle className="h-4 w-4 text-blue-600" />
+                        <AlertDescription className="text-blue-800">
+                          <strong>156 students</strong> with perfect attendance
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <AlertTriangle className="h-5 w-5 text-red-600" />
-                    <span>Top Risk Factors</span>
-                  </CardTitle>
-                  <CardDescription>Most common factors contributing to dropout risk</CardDescription>
+                  <CardTitle>Department-wise Attendance</CardTitle>
+                  <CardDescription>Current month attendance by department</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {dashboardData.topRiskFactors.map((factor, index) => (
-                      <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                        <div className="flex items-center space-x-3">
-                          <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${
-                            index === 0 ? 'from-red-400 to-red-600' :
-                            index === 1 ? 'from-orange-400 to-orange-600' :
-                            index === 2 ? 'from-yellow-400 to-yellow-600' :
-                            'from-gray-400 to-gray-600'
-                          }`} />
-                          <span className="font-medium">{factor.factor}</span>
+                    {departmentData.map((dept) => (
+                      <div key={dept.name} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div>
+                          <h4 className="font-medium">{dept.name}</h4>
+                          <p className="text-sm text-gray-600">{dept.students} students</p>
                         </div>
-                        <div className="flex items-center space-x-4">
-                          <span className="text-sm text-slate-600 dark:text-slate-400">{factor.count} students</span>
-                          <Badge variant="secondary">{factor.percentage}%</Badge>
+                        <div className="text-right">
+                          <div className="text-lg font-bold" style={{ color: dept.color }}>
+                            {Math.floor(Math.random() * 10) + 85}%
+                          </div>
+                          <p className="text-xs text-gray-500">This month</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
-          </TabsContent>
-
-          {/* Data Uploads Tab */}
-          <TabsContent value="uploads" className="space-y-8">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Data Management</h2>
-                <p className="text-slate-600 dark:text-slate-400">Upload required Excel files to generate AI predictions</p>
-              </div>
-              <Button 
-                onClick={generatePredictions}
-                disabled={generating}
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white shadow-lg"
-              >
-                {generating ? (
-                  <>
-                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <Brain className="h-4 w-4 mr-2" />
-                    Generate AI Predictions
-                  </>
-                )}
-              </Button>
             </div>
+          )}
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {uploadCards.map((card, index) => (
-                <motion.div
-                  key={card.key}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="h-full hover:shadow-xl transition-all duration-300 border-none shadow-md bg-white dark:bg-slate-800 group hover:scale-105">
-                    <CardHeader>
-                      <div className="flex items-center space-x-3">
-                        <div className="p-3 rounded-xl bg-gradient-to-br from-blue-500 to-purple-500 group-hover:from-blue-600 group-hover:to-purple-600 transition-all">
-                          <card.icon className="h-6 w-6 text-white" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">{card.title}</CardTitle>
-                          <CardDescription className="text-sm">{card.description}</CardDescription>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      <input
-                        type="file"
-                        ref={fileRefs[card.key]}
-                        accept=".xlsx,.xls,.csv"
-                        onChange={(e) => handleFileUpload(card.key, e.target.files?.[0])}
-                        className="hidden"
-                      />
-                      
-                      <Button
-                        variant="outline"
-                        disabled={uploading[card.key]}
-                        onClick={() => fileRefs[card.key].current?.click()}
-                        className="w-full border-dashed border-2 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all"
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        {uploading[card.key] ? "Uploading..." : "Upload File"}
-                      </Button>
-
-                      {uploadStatus[card.key] === "success" && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                        >
-                          <Alert className="border-green-200 bg-green-50 dark:bg-green-900/20">
-                            <CheckCircle className="h-4 w-4 text-green-600" />
-                            <AlertDescription className="text-green-700 dark:text-green-400">
-                              Upload successful!
-                            </AlertDescription>
-                          </Alert>
-                        </motion.div>
-                      )}
-                      
-                      {uploadStatus[card.key] === "error" && (
-                        <motion.div
-                          initial={{ opacity: 0, scale: 0.9 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                        >
-                          <Alert className="border-red-200 bg-red-50 dark:bg-red-900/20">
-                            <AlertTriangle className="h-4 w-4 text-red-600" />
-                            <AlertDescription className="text-red-700 dark:text-red-400">
-                              Upload failed. Try again.
-                            </AlertDescription>
-                          </Alert>
-                        </motion.div>
-                      )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-          </TabsContent>
-
-          {/* Student Details Tab */}
-          <TabsContent value="students" className="space-y-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-100">Student Risk Analysis</h2>
-                <p className="text-slate-600 dark:text-slate-400">AI-powered insights and notifications</p>
-              </div>
-              <div className="flex items-center space-x-4">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                  <Input
-                    placeholder="Search students..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 w-64"
-                  />
-                </div>
-                <Badge variant="destructive" className="px-3 py-1">
-                  {highRiskStudents.length} High Risk
-                </Badge>
-              </div>
-            </div>
-
-            {/* Student Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-              {filteredPredictions.map((student, index) => (
-                <motion.div
-                  key={student.student_id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className={`shadow-lg border-none transition-all duration-300 hover:shadow-xl ${
-                    student.risk_score > 0.5 
-                      ? 'bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900/20 dark:to-red-800/20 border-red-200' 
-                      : 'bg-white dark:bg-slate-800'
-                  }`}>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <CardTitle className="text-lg font-semibold">{student.name}</CardTitle>
-                          <CardDescription className="text-sm">
-                            {student.student_id} • {student.course}
-                          </CardDescription>
-                        </div>
-                        <Badge 
-                          variant={student.risk_score > 0.5 ? "destructive" : "default"}
-                          className="font-medium"
-                        >
-                          {(student.risk_score * 100).toFixed(1)}% Risk
-                        </Badge>
-                      </div>
-                    </CardHeader>
-                    
-                    <CardContent className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4 text-sm">
-                        <div className="flex items-center space-x-2">
-                          <Clock className="h-4 w-4 text-blue-600" />
-                          <span>Attendance: {student.attendance}%</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <BarChart3 className="h-4 w-4 text-green-600" />
-                          <span>Avg Score: {student.avgScore}%</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Activity className="h-4 w-4 text-purple-600" />
-                          <span>Last Login: {student.lastLogin}</span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Mail className="h-4 w-4 text-orange-600" />
-                          <span>
-  {student.email?.split('@')[0] ?? "Unknown"}...
-</span>
-
-                        </div>
-                      </div>
-
-                      {student.explanation && (
-                        <Alert className="border-red-200 bg-red-50 dark:bg-red-900/20">
-                          <AlertTriangle className="h-4 w-4 text-red-600" />
-                          <AlertDescription className="text-red-700 dark:text-red-400 text-xs">
-                            <strong>AI Analysis:</strong> {student.explanation}
-                          </AlertDescription>
-                        </Alert>
-                      )}
-
-                      <div className="flex space-x-2">
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => sendNotification(student.student_id, 'email')}
-                          className="flex-1 text-xs"
-                        >
-                          <Mail className="h-3 w-3 mr-1" />
-                          Email
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="outline"
-                          onClick={() => sendNotification(student.student_id, 'whatsapp')}
-                          className="flex-1 text-xs"
-                        >
-                          <MessageSquare className="h-3 w-3 mr-1" />
-                          WhatsApp
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          variant="ghost"
-                          onClick={() => setSelectedStudent(student)}
-                          className="px-3"
-                        >
-                          <Eye className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </div>
-
-            {filteredPredictions.length === 0 && (
-              <div className="text-center py-12">
-                <Brain className="h-16 w-16 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-slate-600 dark:text-slate-400">No predictions available</h3>
-                <p className="text-slate-500 dark:text-slate-500">Upload all required files and generate predictions to see student risk analysis.</p>
-              </div>
-            )}
-          </TabsContent>
-
-          {/* Configuration Tab */}
-          <TabsContent value="config" className="space-y-6">
-            <Card className="shadow-lg border-none bg-white dark:bg-slate-800">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Settings className="h-5 w-5 text-blue-600" />
-                  <span>AI Model Configuration</span>
-                </CardTitle>
-                <CardDescription>Configure thresholds and notification settings</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Attendance Threshold (%)</Label>
-                    <Input type="number" defaultValue="75" className="w-full" />
-                    <p className="text-xs text-slate-500">Below this triggers risk alert</p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Assessment Threshold</Label>
-                    <Input type="number" defaultValue="40" className="w-full" />
-                    <p className="text-xs text-slate-500">Minimum passing marks</p>
-                  </div>
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium">Risk Score Threshold</Label>
-                    <Input type="number" step="0.1" defaultValue="0.5" className="w-full" />
-                    <p className="text-xs text-slate-500">Above this is high risk</p>
-                  </div>
-                </div>
-
-                <div className="border-t pt-6">
-                  <h3 className="text-lg font-semibold mb-4">Notification Settings</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                      <div className="flex items-center space-x-3">
-                        <Mail className="h-5 w-5 text-blue-600" />
-                        <div>
-                          <span className="font-medium">Email Notifications</span>
-                          <p className="text-xs text-slate-500">Send risk alerts via email</p>
-                        </div>
-                      </div>
-                      <input type="checkbox" defaultChecked className="w-5 h-5 text-blue-600" />
-                    </div>
-                    
-                    <div className="flex items-center justify-between p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                      <div className="flex items-center space-x-3">
-                        <MessageSquare className="h-5 w-5 text-green-600" />
-                        <div>
-                          <span className="font-medium">WhatsApp Notifications</span>
-                          <p className="text-xs text-slate-500">Send risk alerts via WhatsApp</p>
-                        </div>
-                      </div>
-                      <input type="checkbox" className="w-5 h-5 text-green-600" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex justify-end pt-4">
-                  <Button className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white">
-                    <Settings className="h-4 w-4 mr-2" />
-                    Save Configuration
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      {/* Student Detail Modal */}
-      {selectedStudent && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedStudent(null)}
-        >
-          <motion.div
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white dark:bg-slate-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-6">
-              <div className="flex items-center justify-between mb-6">
+          {/* Communications Tab */}
+          {activeTab === 'communications' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold">{selectedStudent.name}</h3>
-                  <p className="text-slate-600 dark:text-slate-400">{selectedStudent.student_id} • {selectedStudent.course}</p>
+                  <h3 className="text-lg font-semibold text-gray-900">Communications Center</h3>
+                  <p className="text-sm text-gray-600">Send announcements and manage communications</p>
                 </div>
-                <Button variant="ghost" onClick={() => setSelectedStudent(null)}>
-                  ✕
+                <Button>
+                  <Send className="h-4 w-4 mr-2" />
+                  New Announcement
                 </Button>
               </div>
 
-              <div className="grid grid-cols-2 gap-6 mb-6">
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Risk Score</p>
-                    <p className="text-2xl font-bold text-red-600">{(selectedStudent.risk_score * 100).toFixed(1)}%</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Attendance</p>
-                    <p className="text-2xl font-bold text-blue-600">{selectedStudent.attendance}%</p>
-                  </div>
-                </div>
-                <div className="space-y-4">
-                  <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Average Score</p>
-                    <p className="text-2xl font-bold text-green-600">{selectedStudent.avgScore}%</p>
-                  </div>
-                  <div className="p-4 rounded-lg bg-slate-50 dark:bg-slate-700/50">
-                    <p className="text-sm font-medium text-slate-600 dark:text-slate-400">Last Activity</p>
-                    <p className="text-lg font-semibold">{selectedStudent.lastLogin}</p>
-                  </div>
-                </div>
-              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <Card className="lg:col-span-2">
+                  <CardHeader>
+                    <CardTitle>Recent Announcements</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {[
+                        {
+                          title: "Mid-term Examination Schedule Released",
+                          content: "The mid-term examination schedule for all departments has been published...",
+                          date: "2024-08-30",
+                          type: "Academic",
+                          status: "Active"
+                        },
+                        {
+                          title: "New Library Hours Effective September 1st",
+                          content: "Starting September 1st, the library will extend its operating hours...",
+                          date: "2024-08-29",
+                          type: "General",
+                          status: "Active"
+                        },
+                        {
+                          title: "Technical Fest Registration Open",
+                          content: "Registration for the annual technical festival is now open for all students...",
+                          date: "2024-08-28",
+                          type: "Event",
+                          status: "Active"
+                        }
+                      ].map((announcement, index) => (
+                        <div key={index} className="border rounded-lg p-4 space-y-3">
+                          <div className="flex items-start justify-between">
+                            <div className="space-y-1">
+                              <h4 className="font-medium">{announcement.title}</h4>
+                              <p className="text-sm text-gray-600">{announcement.content}</p>
+                            </div>
+                            <Badge variant="outline">{announcement.type}</Badge>
+                          </div>
+                          <div className="flex items-center justify-between text-xs text-gray-500">
+                            <span>Published: {announcement.date}</span>
+                            <div className="flex items-center space-x-2">
+                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                              <span>{announcement.status}</span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
 
-              {selectedStudent.explanation && (
-                <Alert className="border-red-200 bg-red-50 dark:bg-red-900/20 mb-6">
-                  <Brain className="h-4 w-4 text-red-600" />
-                  <AlertDescription className="text-red-700 dark:text-red-400">
-                    <strong>AI Analysis:</strong> {selectedStudent.explanation}
-                  </AlertDescription>
-                </Alert>
-              )}
-
-              <div className="flex space-x-3">
-                <Button 
-                  onClick={() => sendNotification(selectedStudent.student_id, 'email')}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700"
-                >
-                  <Mail className="h-4 w-4 mr-2" />
-                  Send Email Alert
-                </Button>
-                <Button 
-                  onClick={() => sendNotification(selectedStudent.student_id, 'whatsapp')}
-                  className="flex-1 bg-green-600 hover:bg-green-700"
-                >
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Send WhatsApp
-                </Button>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Quick Actions</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button className="w-full justify-start" variant="outline">
+                      <Mail className="h-4 w-4 mr-2" />
+                      Email All Students
+                    </Button>
+                    <Button className="w-full justify-start" variant="outline">
+                      <MessageSquare className="h-4 w-4 mr-2" />
+                      SMS Broadcast
+                    </Button>
+                    <Button className="w-full justify-start" variant="outline">
+                      <Bell className="h-4 w-4 mr-2" />
+                      Push Notification
+                    </Button>
+                    <Button className="w-full justify-start" variant="outline">
+                      <Users className="h-4 w-4 mr-2" />
+                      Parent Meeting Notice
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
-      )}
+          )}
+
+          {/* Settings Tab */}
+          {activeTab === 'settings' && (
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Institute Settings</h3>
+                <p className="text-sm text-gray-600">Configure system preferences and institute details</p>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Institute Profile</CardTitle>
+                    <CardDescription>Update basic institute information</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="institute-name">Institute Name</Label>
+                      <Input id="institute-name" value={instituteProfile.name} readOnly />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="institute-code">Institute Code</Label>
+                      <Input id="institute-code" value={instituteProfile.code} readOnly />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="address">Address</Label>
+                      <Input id="address" value={instituteProfile.address} readOnly />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="website">Website</Label>
+                      <Input id="website" value={instituteProfile.website} readOnly />
+                    </div>
+                    <Button className="w-full">Update Profile</Button>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>System Configuration</CardTitle>
+                    <CardDescription>Manage system settings and preferences</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Email Notifications</h4>
+                        <p className="text-sm text-gray-600">Send system notifications via email</p>
+                      </div>
+                      <div className="w-10 h-6 bg-blue-600 rounded-full relative">
+                        <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">SMS Alerts</h4>
+                        <p className="text-sm text-gray-600">Send important alerts via SMS</p>
+                      </div>
+                      <div className="w-10 h-6 bg-gray-300 rounded-full relative">
+                        <div className="w-4 h-4 bg-white rounded-full absolute left-1 top-1"></div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between p-3 border rounded-lg">
+                      <div>
+                        <h4 className="font-medium">Auto Backup</h4>
+                        <p className="text-sm text-gray-600">Automatically backup data daily</p>
+                      </div>
+                      <div className="w-10 h-6 bg-blue-600 rounded-full relative">
+                        <div className="w-4 h-4 bg-white rounded-full absolute right-1 top-1"></div>
+                      </div>
+                    </div>
+                    <Button className="w-full" variant="outline">Save Settings</Button>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   )
 }

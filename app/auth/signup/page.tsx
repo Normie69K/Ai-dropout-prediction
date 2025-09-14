@@ -98,7 +98,7 @@ export default function RegistrationPage() {
         
         // Redirect after 2 seconds
         setTimeout(() => {
-          window.location.href = '/signin'
+          window.location.href = '/auth/signin'
         }, 2000)
         
       } else {
@@ -144,7 +144,7 @@ export default function RegistrationPage() {
                   <span>Home</span>
                 </Button>
               </Link>
-              <Link href="/signin">
+              <Link href="/auth/signin">
                 <Button variant="outline" size="sm">
                   Sign In
                 </Button>

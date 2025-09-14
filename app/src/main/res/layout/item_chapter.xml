@@ -31,22 +31,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:fontFamily="@font/alata"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onSurface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/chapter_icon"
             app:layout_constraintTop_toTopOf="@id/chapter_icon"
-            tools:text="Introduction to Algorithms"/>
+            tools:text="Introduction to Algorithms" />
 
         <TextView
             android:id="@+id/text_view_chapter_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="@color/onSurfaceVariant"
             app:layout_constraintStart_toStartOf="@id/text_view_chapter_title"
             app:layout_constraintTop_toBottomOf="@id/text_view_chapter_title"
-            tools:text="Chapter 1 ・ 24 pages"/>
+            tools:text="Chapter 1 ・ 24 pages" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

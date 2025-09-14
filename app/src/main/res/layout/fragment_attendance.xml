@@ -11,12 +11,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/alata"
         android:text="Attendance Overview"
         android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/alata"
         android:layout_marginBottom="16dp"
         android:text="Track your class attendance across all subjects"
         android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
@@ -25,6 +27,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_attendance"
         android:layout_width="match_parent"
+        android:fontFamily="@font/alata"
         android:layout_height="match_parent"
         tools:itemCount="3"
         tools:listitem="@layout/item_attendance_subject"/>

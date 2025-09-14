@@ -26,14 +26,14 @@ class MarksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 1. Create temporary marks data
+        // Create temporary data to display
         val marksData = listOf(
             SubjectMarks("Data Structures", "CS301", "A+", "18/20", "19/20", "72/80"),
             SubjectMarks("Database Systems", "CS302", "A", "15/20", "17/20", "68/80"),
             SubjectMarks("Computer Networks", "CS303", "F", "8/20", "10/20", "40/80")
         )
 
-        // 2. Create and set up the adapter
+        // Create and set up the adapter
         val marksAdapter = MarksAdapter(marksData)
         binding.recyclerViewMarks.apply {
             layoutManager = LinearLayoutManager(context)

@@ -23,13 +23,16 @@ class MarksAdapter(private val marksList: List<SubjectMarks>) :
 
     override fun onBindViewHolder(holder: MarksViewHolder, position: Int) {
         val item = marksList[position]
+        // The binding now connects to the IDs in your layout
         holder.binding.apply {
             subjectNameMarks.text = item.subjectName
             subjectCodeMarks.text = item.subjectCode
             gradeTag.text = item.grade
-            // Assuming the breakdown text views are nested
-            // You'll need to add IDs to the TextViews inside the breakdown LinearLayouts
-            // For example: textTest1Score.text = item.test1Score
+
+            // These lines now work correctly
+            textTest1.text = item.test1Score
+            textTest2.text = item.test2Score
+            textFinal.text = item.finalScore
         }
     }
 

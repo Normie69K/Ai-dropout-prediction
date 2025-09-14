@@ -36,5 +36,16 @@
         <item name="android:textColor">@color/onSurface</item>
     </style>
 
+
+        <style name="BulletPoint" parent="Widget.AppCompat.TextView">
+            <item name="android:layout_width">wrap_content</item>
+            <item name="android:layout_height">wrap_content</item>
+            <item name="android:textAppearance">@style/TextAppearance.Material3.BodyMedium</item>
+            <item name="android:textColor">@color/onSurfaceVariant</item>
+            <item name="android:drawablePadding">8dp</item>
+            <item name="android:drawableStart">@drawable/ic_bullet</item>
+            <item name="android:layout_marginBottom">4dp</item>
+        </style>
+
     <style name="Theme.AltF4" parent="Base.Theme.AltF4" />
 </resources>

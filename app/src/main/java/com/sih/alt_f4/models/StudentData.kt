@@ -35,8 +35,10 @@ data class Chapter(
     val pageCount: Int
 )
 
-data class Notification(
+
+data class AcademicAlert(
+    val type: String, // e.g., "Critical", "Info"
     val title: String,
     val description: String,
-    val time: String
+    val hasStudyPlan: Boolean = false
 )

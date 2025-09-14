@@ -1,5 +1,6 @@
 package com.sih.alt_f4.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +25,13 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         binding.buttonSignIn.setOnClickListener {
-            // Navigate to the main part of the app
+            // 1. Save the login state to true
+            val sharedPreferences = requireActivity().getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
+            sharedPreferences.edit().putBoolean("is_logged_in", true).apply()
+
+            // 2. Navigate to the main part of the app
             findNavController().navigate(R.id.action_loginFragment_to_main_nav_graph)
         }
     }

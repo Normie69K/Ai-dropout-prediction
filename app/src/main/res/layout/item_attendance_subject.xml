@@ -20,35 +20,38 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
+            android:fontFamily="@font/alata"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onSurface"
             app:layout_constraintEnd_toStartOf="@+id/status_tag"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Data Structures and Algorithms"/>
+            tools:text="Data Structures and Algorithms" />
 
         <TextView
             android:id="@+id/subject_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
             android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
             android:textColor="@color/onSurfaceVariant"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/subject_name"
-            tools:text="CS301"/>
+            tools:text="CS301" />
 
         <TextView
             android:id="@+id/status_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_status_good"
+            android:fontFamily="@font/alata"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
             android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
             android:textColor="@color/status_good_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Good"/>
+            tools:text="Good" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progress_bar"
@@ -66,12 +69,13 @@
             android:id="@+id/attendance_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
             android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
             android:textColor="@color/onSurface"
             app:layout_constraintBottom_toBottomOf="@id/progress_bar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/progress_bar"
-            tools:text="95%"/>
+            tools:text="95%" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

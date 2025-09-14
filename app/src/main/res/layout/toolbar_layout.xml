@@ -10,6 +10,7 @@
         android:id="@+id/toolbar_generic_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/alata"
         android:text="Student Portal"
         android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
         android:textColor="@color/onSurface"
@@ -29,6 +30,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_bot_avatar"/>
+
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -36,6 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:fontFamily="@font/alata"
         android:text="Arjun Sharma"
         android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
         android:textColor="@color/onSurface"
@@ -46,6 +54,7 @@
         android:id="@+id/toolbar_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/alata"
         android:text="Welcome back"
         android:textAppearance="@style/TextAppearance.Material3.BodySmall"
         android:textColor="@color/onSurfaceVariant"

@@ -25,7 +25,14 @@
             android:id="@+id/dashboardFragment"
             android:name="com.sih.alt_f4.fragments.DashboardFragment"
             android:label="DashboardFragment"
-            tools:layout="@layout/fragment_dashboard" />
+            tools:layout="@layout/fragment_dashboard">
+            <action
+                android:id="@+id/action_dashboardFragment_to_studyStrategyFragment"
+                app:destination="@id/studyStrategyFragment"
+                app:enterAnim="@anim/slide_in_up"
+                app:popExitAnim="@anim/slide_out_down" />
+        </fragment>
+
         <fragment
             android:id="@+id/attendanceFragment"
             android:name="com.sih.alt_f4.fragments.AttendanceFragment"
@@ -41,6 +48,11 @@
             android:name="com.sih.alt_f4.fragments.CounsellingFragment"
             android:label="CounsellingFragment"
             tools:layout="@layout/fragment_counselling" />
-    </navigation>
 
+        <fragment
+            android:id="@+id/studyStrategyFragment"
+            android:name="com.sih.alt_f4.fragments.StudyStrategyFragment"
+            android:label="StudyStrategyFragment"
+            tools:layout="@layout/fragment_study_strategy" />
+    </navigation>
 </navigation>

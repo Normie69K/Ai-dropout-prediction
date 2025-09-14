@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.sih.alt_f4.fragments.LoginFragment"
+        android:label="LoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_main_nav_graph"
+            app:destination="@id/main_nav_graph"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <navigation
+        android:id="@+id/main_nav_graph"
+        app:startDestination="@id/dashboardFragment">
+        <fragment
+            android:id="@+id/dashboardFragment"
+            android:name="com.sih.alt_f4.fragments.DashboardFragment"
+            android:label="DashboardFragment"
+            tools:layout="@layout/fragment_dashboard" />
+        <fragment
+            android:id="@+id/attendanceFragment"
+            android:name="com.sih.alt_f4.fragments.AttendanceFragment"
+            android:label="AttendanceFragment"
+            tools:layout="@layout/fragment_attendance" />
+        <fragment
+            android:id="@+id/marksFragment"
+            android:name="com.sih.alt_f4.fragments.MarksFragment"
+            android:label="MarksFragment"
+            tools:layout="@layout/fragment_marks" />
+        <fragment
+            android:id="@+id/counsellingFragment"
+            android:name="com.sih.alt_f4.fragments.CounsellingFragment"
+            android:label="CounsellingFragment"
+            tools:layout="@layout/fragment_counselling" />
+    </navigation>
+</navigation>

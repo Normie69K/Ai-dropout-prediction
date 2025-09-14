@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="primary">#0061A4</color>
+    <color name="onPrimary">#FFFFFF</color>
+    <color name="primaryContainer">#D1E4FF</color>
+    <color name="onPrimaryContainer">#001D36</color>
+    <color name="secondary">#535F70</color>
+    <color name="onSecondary">#FFFFFF</color>
+    <color name="secondaryContainer">#D7E3F7</color>
+    <color name="onSecondaryContainer">#101C2B</color>
+    <color name="tertiary">#6B5778</color>
+    <color name="onTertiary">#FFFFFF</color>
+    <color name="tertiaryContainer">#F2DAFF</color>
+    <color name="onTertiaryContainer">#251431</color>
+    <color name="error">#BA1A1A</color>
+    <color name="onError">#FFFFFF</color>
+    <color name="background">#FDFBFF</color>
+    <color name="onBackground">#1A1C1E</color>
+    <color name="surface">#FDFBFF</color>
+    <color name="onSurface">#1A1C1E</color>
+    <color name="surfaceVariant">#DFE2EB</color>
+    <color name="onSurfaceVariant">#43474E</color>
+    <color name="outline">#73777F</color>
+
+    <color name="status_good_bg">#C8F5D9</color>
+    <color name="status_good_text">#006D39</color>
+    <color name="status_warning_bg">#FFF8E1</color>
+    <color name="status_warning_text">#F57F17</color>
+    <color name="status_critical_bg">#FFDAD6</color>
+    <color name="status_critical_text">#BA1A1A</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="light_gray">#F5F5F5</color>
+    <color name="slate">#8892B0</color>
+    <color name="light_slate">#CCD6F6</color>
+    <color name="dark_slate">#495670</color>
+
+    <color name="primary_dark_blue">#0A192F</color>
+
+    <color name="status_red">#FF455F</color>
+
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
+    android:background="?attr/colorSurfaceContainerLowest"
     tools:context=".fragments.DashboardFragment">
 
     <LinearLayout
@@ -13,31 +13,94 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/text_hello_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+            tools:text="Hello, Aditya!"/>
+
+        <TextView
+            android:fontFamily="@font/alata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Welcome back to your dashboard."
+            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"/>
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             app:cardElevation="0dp"
-            app:strokeColor="@color/outline"
+            app:strokeColor="?attr/colorOutline"
             app:strokeWidth="1dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-
                 <TextView
+                    android:fontFamily="@font/alata"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Academic Profile"
+                    android:text="Performance Summary"
+                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/text_gpa"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/alata"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        tools:text="GPA: 8.2"/>
+                    <TextView
+                        android:fontFamily="@font/alata"
+                        android:id="@+id/text_pass_percent"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textAppearance="@style/TextAppearance.Material3.BodyLarge"
+                        tools:text="Passed: 95%"/>
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/card_backlogs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardBackgroundColor="@color/status_warning_bg"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:fontFamily="@font/alata"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Backlogs"
+                    android:textColor="@color/status_warning_text"
                     android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
                 <TextView
-                    android:id="@+id/student_id"
+                    android:id="@+id/text_backlogs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="ID: 2023CS001"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/alata"
+                    android:textColor="@color/status_warning_text"
                     android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    android:textColor="@color/onSurfaceVariant"/>
+                    tools:text="1 Failed Subject: Computer Networks"/>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -45,40 +108,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Overview"
-            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
+            android:fontFamily="@font/alata"
+            android:text="Academic Alerts"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge" />
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewAlerts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/status_critical_bg"
-            app:cardElevation="0dp">
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/alata"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_academic_alert" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="⚠️ Attention Required"
-                    android:textColor="@color/status_critical_text"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
+        <TextView
+            android:fontFamily="@font/alata"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:text="Current Semester Subjects"
+            android:textAppearance="@style/TextAppearance.Material3.TitleLarge"/>
 
-                <TextView
-                    android:id="@+id/attention_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:textColor="@color/status_critical_text"
-                    android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
-                    tools:text="You have 1 subject with attendance below 75%."/>
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_subjects"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alata"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="4"
+            tools:listitem="@layout/item_dashboard_subject"/>
     </LinearLayout>
 </ScrollView>

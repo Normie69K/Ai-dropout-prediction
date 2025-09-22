@@ -1,16 +1,21 @@
 package com.sih.alt_f4.fragments
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sih.alt_f4.adapters.ChatAdapter
 import com.sih.alt_f4.databinding.FragmentCounsellingBinding
 import com.sih.alt_f4.models.ChatMessage
+import com.sih.alt_f4.network.DeepSeekChatRequest
+import com.sih.alt_f4.network.DeepSeekMessage
+import com.sih.alt_f4.network.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -20,11 +25,8 @@ class CounsellingFragment : Fragment() {
     private var _binding: FragmentCounsellingBinding? = null
     private val binding get() = _binding!!
 
-    private val chatMessages = mutableListOf<ChatMessage>()
     private lateinit var chatAdapter: ChatAdapter
-
-    // TODO: Initialize the Gemini API Model here when you're ready
-    // private lateinit var geminiModel: GenerativeModel
+    private val chatMessages = mutableListOf<ChatMessage>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,85 +39,109 @@ class CounsellingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // TODO: Add your Gemini API key and initialize the model in this function
-        // val generativeModel = GenerativeModel( ... )
-
-        chatAdapter = ChatAdapter(chatMessages)
-        binding.recyclerViewChat.apply {
-            layoutManager = LinearLayoutManager(context).apply {
-                stackFromEnd = true
-            }
-            adapter = chatAdapter
-        }
-
-        addInitialMessage()
+        setupRecyclerView()
+        setupInitialMessage()
 
         binding.buttonSend.setOnClickListener {
-            sendMessage()
+            val userMessage = binding.editTextMessage.text.toString().trim()
+            if (userMessage.isNotEmpty()) {
+                sendMessage(userMessage)
+                binding.editTextMessage.text.clear()
+            }
         }
     }
 
-    private fun addInitialMessage() {
-        chatMessages.add(
-            ChatMessage(
-                "Hello! I'm your AI counselor. How can I assist with your studies today?",
+    private fun setupRecyclerView() {
+        chatAdapter = ChatAdapter(chatMessages)
+        binding.recyclerViewChat.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = chatAdapter
+        }
+    }
+
+    private fun setupInitialMessage() {
+        if (chatMessages.isEmpty()) {
+            val welcomeMessage = ChatMessage(
+                "Hello! I am your AI Mentor Mitra powered by DeepSeek. How can I assist you today?",
                 getCurrentTimestamp(),
                 isFromAI = true
             )
-        )
-        chatAdapter.notifyItemInserted(chatMessages.size - 1)
+            chatMessages.add(welcomeMessage)
+            chatAdapter.notifyItemInserted(0)
+        }
     }
 
-    private fun sendMessage() {
-        val messageText = binding.editTextMessage.text.toString().trim()
-        if (messageText.isNotEmpty()) {
-            val userMessage = ChatMessage(messageText, getCurrentTimestamp(), isFromAI = false)
-            chatMessages.add(userMessage)
-            chatAdapter.notifyItemInserted(chatMessages.size - 1)
-            binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
-
-            binding.editTextMessage.setText("")
-
-            // Call the function to get a real AI reply
-            getRealAiReply(messageText)
-        }
+    private fun sendMessage(messageText: String) {
+        val userMessage = ChatMessage(messageText, getCurrentTimestamp(), isFromAI = false)
+        chatMessages.add(userMessage)
+        chatAdapter.notifyItemInserted(chatMessages.size - 1)
+        binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
+        getRealAiReply(messageText)
     }
 
     private fun getRealAiReply(userMessage: String) {
-        // 1. Show a "typing..." indicator to the user (optional)
+        val typingIndicator = ChatMessage("...", getCurrentTimestamp(), isFromAI = true, isTyping = true)
+        chatMessages.add(typingIndicator)
+        val typingPosition = chatMessages.size - 1
+        chatAdapter.notifyItemInserted(typingPosition)
+        binding.recyclerViewChat.scrollToPosition(typingPosition)
 
-        // 2. Use the AI's SDK to send the user's message
-        //    This is the space for your Gemini API call
-        /*
-        geminiModel.generateContent(userMessage) { result ->
-            // 3. When the AI responds, get its text
-            val aiResponseText = result.text ?: "Sorry, I can't answer that right now."
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // Use DeepSeekChatRequest instead of ChatRequest
+                val request = DeepSeekChatRequest(
+                    model = "deepseek-chat",
+                    messages = listOf(
+                        DeepSeekMessage("system", "You are Mentor Mitra, a helpful and empathetic AI counselor. Provide supportive, professional guidance."),
+                        DeepSeekMessage("user", userMessage)
+                    ),
+                    temperature = 0.7,
+                    max_tokens = 500
+                )
 
-            // 4. Create a new ChatMessage and add it to your list
-            val aiReply = ChatMessage(aiResponseText, getCurrentTimestamp(), true)
-            chatMessages.add(aiReply)
+                val response = RetrofitClient.deepSeekApi.sendMessage(request).execute()
 
-            // 5. Update the UI on the main thread
-            activity?.runOnUiThread {
-                chatAdapter.notifyItemInserted(chatMessages.size - 1)
-                binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
-                // 6. Hide the "typing..." indicator
+                withContext(Dispatchers.Main) {
+                    chatMessages.removeAt(typingPosition)
+                    chatAdapter.notifyItemRemoved(typingPosition)
+
+                    if (response.isSuccessful && response.body() != null) {
+                        val aiResponse = response.body()!!.choices.firstOrNull()?.message?.content
+                            ?: "Sorry, I can't process that right now. Please try again."
+                        val aiReply = ChatMessage(aiResponse, getCurrentTimestamp(), true)
+                        chatMessages.add(aiReply)
+                        chatAdapter.notifyItemInserted(chatMessages.size - 1)
+                        binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
+                    } else {
+                        val errorMessage = when (response.code()) {
+                            401 -> "Authentication error. Please check your API key."
+                            429 -> "Rate limit exceeded. Please wait a moment."
+                            500 -> "Server error. Please try again later."
+                            else -> "Error: ${response.code()} - ${response.errorBody()?.string()}"
+                        }
+                        val errorReply = ChatMessage(errorMessage, getCurrentTimestamp(), true)
+                        chatMessages.add(errorReply)
+                        chatAdapter.notifyItemInserted(chatMessages.size - 1)
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    if (typingPosition < chatMessages.size && chatMessages[typingPosition].isTyping) {
+                        chatMessages.removeAt(typingPosition)
+                        chatAdapter.notifyItemRemoved(typingPosition)
+                    }
+                    val errorMessage = when (e) {
+                        is java.net.SocketTimeoutException -> "Request timeout. Please check your connection."
+                        is java.net.UnknownHostException -> "No internet connection."
+                        else -> "Error: ${e.localizedMessage ?: "Unknown error"}"
+                    }
+                    val errorReply = ChatMessage(errorMessage, getCurrentTimestamp(), true)
+                    chatMessages.add(errorReply)
+                    chatAdapter.notifyItemInserted(chatMessages.size - 1)
+                    binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
+                }
             }
         }
-        */
-
-        // As a fallback, here is the old simulation logic so the app still works
-        // You can remove this when you implement the real API call above.
-        Handler(Looper.getMainLooper()).postDelayed({
-            val aiReply = ChatMessage(
-                "This is a simulated reply. Replace this with your Gemini API call.",
-                getCurrentTimestamp(),
-                isFromAI = true
-            )
-            chatMessages.add(aiReply)
-            chatAdapter.notifyItemInserted(chatMessages.size - 1)
-            binding.recyclerViewChat.scrollToPosition(chatMessages.size - 1)
-        }, 1500)
     }
 
     private fun getCurrentTimestamp(): String {

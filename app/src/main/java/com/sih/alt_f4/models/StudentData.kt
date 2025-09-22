@@ -26,7 +26,8 @@ data class SubjectMarks(
 data class ChatMessage(
     val message: String,
     val timestamp: String,
-    val isFromAI: Boolean
+    val isFromAI: Boolean,
+    val isTyping: Boolean = false
 )
 
 data class Chapter(
